@@ -11,12 +11,12 @@ export default function Navbar() {
   return (
     <nav className="relative w-full flex flex-wrap items-center justify-between bg-white shadow dark:bg-gray-800 py-4">
       <div className="container-fluid w-full flex flex-wrap items-center justify-between px-6">
-        <ul className="flex items-center list-style-none mr-auto">
+        <ul className="flex items-center list-style-none">
           <li><StyledNavLink to="/" html="Home" /></li>
           <li><StyledNavLink to="/about" html="About" /></li>
         </ul>
 
-        <ul className="flex items-center relative list-style-none">
+        <ul className="flex items-center list-style-none">
           <li><StyledNavLink to="/login" html="Log In" /></li>
           <li><StyledNavLink to="/signup" html="Sign Up" /></li>
         </ul>
