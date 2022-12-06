@@ -7,7 +7,7 @@ import Field from "../components/form/Field"
 import { useUserContext } from "../context/user"
 
 export default function Login() {
-  const [loginForm, setLoginForm] = useState({ username: '', password: ''})
+  const [loginForm, setLoginForm] = useState({ email: '', password: ''})
   const navigate = useNavigate();
   const { tokenValid, setTokenValid } = useUserContext();
 
@@ -34,7 +34,7 @@ export default function Login() {
             type="email"
             label="Email address"
             value={ loginForm.email }
-            onChange={(e) => setLoginForm({...loginForm, username: e.target.value})} />
+            onChange={(e) => setLoginForm({...loginForm, email: e.target.value})} />
           <Field
             name="password"
             type="password"
