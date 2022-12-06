@@ -1,28 +1,34 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Navigate } from "react-router-dom"
 
 import authenClient from "../clients/authenClient"
 import SubmitButton from "../components/form/SubmitButton"
 import Field from "../components/form/Field"
+import { useUserContext } from "../context/user"
 
 export default function Signup() {
   const [signupForm, setSignupForm] = useState({ email: '', password: '', first_name: '', last_name: ''});
   const navigate = useNavigate();
+  const { tokenValid, setTokenValid } = useUserContext();
 
   const onSignup = async (e) => {
     e.preventDefault();
     await authenClient
       .signup(signupForm)
       .then((response) => {
-        navigate("/?signin");
-        alert(response.data.detail);
+        navigate("/?signup");
+        setTokenValid(true);
+        alert(response);
       })
       .catch((error) => {
-        alert(error.response.data.detail);
+        setTokenValid(false);
+        alert(error);
       });
   };
 
-  return (
+  return (tokenValid) ? (
+    <Navigate to="/?signup" />
+  ) : (
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md">
         <form onSubmit={ onSignup }>

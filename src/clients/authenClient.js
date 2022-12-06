@@ -33,21 +33,30 @@ export class AuthenClient {
 
 
   getApiClient(config) {
-		let initialConfig = { baseURL: `${config.authenUrl}`, timeout: 1000 }
+		let initialConfig = { baseURL: `http://${config.authenUrl}/v1/auth`, timeout: 1000 }
 		let client = axios.create(initialConfig);
     client.interceptors.request.use(localStorageTokenInterceptor);
 		return client;
 	}
 
   async signup(data) {
-    return await this.apiClient.post("/signup", data);
+    return await this.apiClient
+      .post("/signup", data)
+      .then((resp) => {
+        return this.login(data);
+      });
   }
 
   async login(data) {
     const params = new URLSearchParams();
-    data["grant_type"] = "password";
-    for (var key in data) {
-      params.append(key, data[key]);
+    console.log(data["email"]);
+    let to_add = {
+      "grant_type": "password",
+      "username": data["email"],
+      "password": data["password"]
+    }
+    for (var key in to_add) {
+      params.append(key, to_add[key]);
     }
     return await this.apiClient
       .post("/login", params)
