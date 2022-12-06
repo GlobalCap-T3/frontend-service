@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function Field({label, name, value, onChange, type = "text"}) {
   return (
     <div className="mb-4">

@@ -1,12 +1,9 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-import { config } from "../config"
-import AuthenClient from "../clients/authenClient"
+import authenClient from "../clients/authenClient"
 import SubmitButton from "../components/form/SubmitButton"
 import Field from "../components/form/Field"
-
-const client = new AuthenClient(config);
 
 export default function Signup() {
   const [signupForm, setSignupForm] = useState({ email: '', password: '', first_name: '', last_name: ''});
@@ -14,7 +11,7 @@ export default function Signup() {
 
   const onSignup = async (e) => {
     e.preventDefault();
-    await client
+    await authenClient
       .signup(signupForm)
       .then((response) => {
         navigate("/?signin");

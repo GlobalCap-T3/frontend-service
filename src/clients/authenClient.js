@@ -2,7 +2,28 @@ import jwtDecode from "jwt-decode"
 import * as moment from "moment"
 import axios from "axios"
 
-export default class AuthenClient {
+import { config } from "../config"
+
+function localStorageTokenInterceptor(config) {
+  let headers = {}
+  const tokenString = localStorage.getItem("token")
+
+  if (tokenString) {
+    const token = JSON.parse(tokenString)
+    const decodedAccessToken = jwtDecode(token.access_token)
+    const isAccessTokenValid =
+      moment.unix(decodedAccessToken.exp).toDate() > new Date()
+    if (isAccessTokenValid) {
+      headers["Authorization"] = `Bearer ${token.access_token}`
+    } else {
+      alert('Your login session has expired. Please login again.')
+    }
+  }
+  config["headers"] = headers
+  return config;
+}
+
+export class AuthenClient {
 	constructor(config) {
 		this.config = {
 			...config
@@ -10,29 +31,11 @@ export default class AuthenClient {
 		this.apiClient = this.getApiClient(this.config);
 	}
 
-  localStorageTokenInterceptor(config) {
-    let headers = {}
-    const tokenString = localStorage.getItem("token")
 
-    if (tokenString) {
-      const token = JSON.parse(tokenString)
-      const decodedAccessToken = jwtDecode(token.access_token)
-      const isAccessTokenValid =
-        moment.unix(decodedAccessToken.exp).toDate() > new Date()
-      if (isAccessTokenValid) {
-        headers["Authorization"] = `Bearer ${token.access_token}`
-      } else {
-        alert('Your login session has expired. Please login again.')
-      }
-    }
-    config["headers"] = headers
-    return config;
-  }
-
-	getApiClient(config) {
+  getApiClient(config) {
 		let initialConfig = { baseURL: `${config.authenUrl}`, timeout: 1000 }
 		let client = axios.create(initialConfig);
-		client.interceptors.request.use(this.localStorageTokenInterceptor);
+    client.interceptors.request.use(localStorageTokenInterceptor);
 		return client;
 	}
 
@@ -43,7 +46,6 @@ export default class AuthenClient {
   async login(data) {
     const params = new URLSearchParams();
     data["grant_type"] = "password";
-    console.log(data);
     for (var key in data) {
       params.append(key, data[key]);
     }
@@ -55,10 +57,20 @@ export default class AuthenClient {
       });
   }
 
-  fetchUser() {
-    return this.apiClient.get("/user/me").then(({data}) => {
+  async fetchUser() {
+    return await this.apiClient
+      .get("/user/me")
+      .then(({data}) => {
         localStorage.setItem("user", JSON.stringify(data));
         return data
     })
   }
+
+  logout() {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+  }
 }
+
+const authenClient = new AuthenClient(config);
+export default authenClient;

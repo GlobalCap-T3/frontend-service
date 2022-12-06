@@ -1,31 +1,31 @@
-import React, { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useState } from "react"
+import { useNavigate, Navigate } from "react-router-dom"
 
-import { config } from "../config"
-import AuthenClient from "../clients/authenClient"
+import authenClient from "../clients/authenClient"
 import SubmitButton from "../components/form/SubmitButton"
 import Field from "../components/form/Field"
-
-const client = new AuthenClient(config);
+import { useUserContext } from "../context/user"
 
 export default function Login() {
   const [loginForm, setLoginForm] = useState({ username: '', password: ''})
   const navigate = useNavigate();
+  const { tokenValid, setTokenValid } = useUserContext();
 
   const onLogin = async (e) => {
     e.preventDefault();
-    await client
+    await authenClient
       .login(loginForm)
       .then((response) => {
+        setTokenValid(true);
         navigate("/?login");
-        alert(response.data.detail);
       })
       .catch((error) => {
-        alert(error.response.data.detail);
+        setTokenValid(false);
       });
   };
-
-  return (
+  return (tokenValid) ? (
+    <Navigate to="/?login" />
+  ) : (
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md">
         <form onSubmit={ onLogin }>
