@@ -18,9 +18,11 @@ export default function Login() {
       .then((response) => {
         setTokenValid(true);
         navigate("/?login");
+        alert(response);
       })
       .catch((error) => {
         setTokenValid(false);
+        alert(error);
       });
   };
   return (tokenValid) ? (
