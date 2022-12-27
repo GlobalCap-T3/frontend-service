@@ -17,7 +17,6 @@ const InnerContainer = styled.div`
 `;
 
 export default function Profile() {
-  const navigate = useNavigate();
   // const { tokenValid, setTokenValid } = useUserContext();
   const [tokenValid, setTokenValid] = useState(true); // for dev only (change to userContext later)
 
