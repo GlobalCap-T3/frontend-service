@@ -6,6 +6,7 @@ import SearchSidebar from "../components/discussion/SearchSidebar"
 import Information from "../components/profile/Information"
 import Modal from "../components/modal/Modal"
 import styled from "styled-components"
+import axios from "axios";
 
 const exampleRecentDiscussions = [
   {
@@ -202,7 +203,29 @@ export default function Discussion() {
     setRecentDiscussions(tempRecentDiscussions);
   };
   
-
+  const postDiscussion = async(e) => {
+    e.preventDefault()
+    try {
+      let res = await fetch("localhost:5030/v1/discussion/create", {
+        method: "POST",
+        body: JSON.stringify({
+          title: newPostTitle,
+          content: newPostContent,
+        }),
+      });
+      let resJson = await res.json();
+      if (res.status === 200) {
+        setNewPostTitle("");
+        setNewPostContent("");
+        console.log("Discussion created successfully")
+      } else {
+        console.log("Error occured while posting discussion");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    
+  }
 
   useEffect(() => {
     getDiscussion();
@@ -260,7 +283,7 @@ export default function Discussion() {
                 closable={true}
                 maskClosable={true}
                 onClose={closeModal}>
-                  <NewPostModalForm>
+                  <NewPostModalForm onSubmit={postDiscussion}>
                     <NewPostTitle>New Post</NewPostTitle>
                     <NewPostTable>
                       <NewPostTbody>
