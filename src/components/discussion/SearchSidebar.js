@@ -71,8 +71,9 @@ const Sidebar = styled.div`
   min-width: 150px;
   max-width: 300px;
   height: 100%;
-  background-color: lightgrey;
   overflow: auto;
+  padding 0px 15px 10px 15px;
+  box-shadow: 5px 5px 5px -5px grey;
 `;
 
 const SearchbarContainer = styled.div`
@@ -88,11 +89,11 @@ const SearchedContainer = styled.ul`
 `;
 
 const SearchedItem = styled.li`
-  padding: 7px 0 7px 0;
-  height: 100px;
+  height: 90px;
+  padding: 5px 0 5px 0;
+  margin-bottom: 5px;
   font-size: 15px;
   cursor: pointer;
-  // background-color: ${(props) => (props.selected ? 'white' : 'none')};
   &:hover{
     background-color: white;
   }
