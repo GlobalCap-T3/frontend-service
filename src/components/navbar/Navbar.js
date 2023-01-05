@@ -22,6 +22,7 @@ export default function Navbar() {
             </Link>
           </li>
           <li><StyledNavLink to="/about" html="About" /></li>
+          <li><StyledNavLink to="/profile" html="Profile" /></li>
         </ul>
 
         <ul className="flex items-center list-style-none">

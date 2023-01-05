@@ -4,6 +4,8 @@ import authenClient from "../clients/authenClient"
 import { useUserContext } from "../context/user"
 import LeftBar from "../components/profile/LeftBar"
 import Information from "../components/profile/Information"
+import Following from "../components/profile/Following"
+import Message from "../components/profile/Message"
 import styled from "styled-components"
 
 const Container = styled.div`
@@ -32,6 +34,12 @@ export default function Profile() {
     joinDate: ""
   });
 
+  const [followInfo, setFollowInfo] = useState({
+    followingPapers: [],
+    followingDiscussions: [],
+    followingUsers: []
+  });
+
   const getProfileImage = async() => {
     // (need) code for fetching user profile image
 
@@ -51,8 +59,18 @@ export default function Profile() {
     tempProfileInfo.joinDate = "2022-12-10T13:45:00.000Z";
     setProfileInfo(tempProfileInfo);
   };
+
   const getPublishedPaper = async() => {}
-  const getFollowing = async() => {}
+
+  const getFollowing = async() => {
+    // TODO:
+    // temp code
+    let temp = followInfo;
+    temp.followingPapers = ["Development of a Machine Learning Model for Sonographic Assessment of Gestational Age", "Device for Dual Ultrasound and Dry Needling Trigger Points Treatment", "Synthetic Aperture Radar (SAR) Meets Deep Learning"];
+    temp.followingDiscussions = ["Can somebody explain how SVM works?", "Researcher Job Opportunity", "What are people's thoughts about the ethics of AI in the future?", "Interdisciplinary Study of Molecular Biology and Computer Science"];
+    temp.followingUsers = ["Chaewon Kwak", "Donghee Yoon", "Minh Phuong Phan", "Yujun Shen"];
+    setFollowInfo(temp);
+  }
 
   useEffect(() => {
     getProfileImage();
@@ -82,7 +100,7 @@ export default function Profile() {
     ) : (
     (currentChannel==="Following") ? (
       <InnerContainer>
-        Following
+        <Following followInfo={followInfo} setFollowInfo={setFollowInfo}/>
       </InnerContainer>
     ) : (
     (currentChannel==="Notes/Documents") ? (
@@ -91,7 +109,7 @@ export default function Profile() {
       </InnerContainer>
     ) : (
       <InnerContainer>
-        Message
+        <Message />
       </InnerContainer>
     )
     )
